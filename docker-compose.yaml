@@ -1,0 +1,23 @@
+version: '3'
+services:
+  mysql-standlone:
+    image: 'mysql:5.7'
+    environment:
+      -MYSQL_ROOT_PASSWORD:root
+      -MYSQL_PASSWORD:root
+      -MYSQL_DATABASE:bk4
+    port:
+      -"3307:3306"
+  springboot-docker-container:
+    image: myapp
+    port:
+      -"8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-standlone:3306/bk4?autoReconnect=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "root"
+    build:
+      context: "./"
+      dockerfile: "Dockerfile"
+    depends_on:
+      - mysql-standlone
